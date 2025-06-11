@@ -1,0 +1,11 @@
+gcloud functions deploy HelloFirestore ^
+    --gen2 ^
+    --runtime=go122 ^
+    --region=asia-southeast1 ^
+    --project=lucy-cashier-dev ^
+    --source=. ^
+    --trigger-event-filters="type=google.cloud.firestore.document.v1.created" ^
+    --trigger-event-filters="database=(default)" ^
+    --trigger-event-filters-path-pattern="document=monthly_summary_reports/{documentId}" ^
+    --max-instances=10 ^
+    --allow-unauthenticated
