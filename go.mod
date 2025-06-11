@@ -1,4 +1,4 @@
-module Suryo-trigger-test
+module github.com/deaglefrenzy/trigger-test
 
 go 1.24.0
 
