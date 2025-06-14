@@ -3,6 +3,7 @@ package cash_entries
 import (
 	"context"
 	"fmt"
+	"log"
 
 	firebase "firebase.google.com/go"
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
@@ -44,7 +45,7 @@ func DetectCashEntriesChanges(ctx context.Context, event event.Event) error {
 				oldArr = oldArrValue.Values
 			}
 		}
-		// Find new entries by comparing lengths and values
+
 		for _, entry := range arr {
 			found := false
 			for _, oldEntry := range oldArr {
@@ -70,7 +71,7 @@ func DetectCashEntriesChanges(ctx context.Context, event event.Event) error {
 
 	PendingEntries.CashEntry = cashEntry
 
-	//log.Printf("Converted Pending Entry: %+v", PendingEntries)
+	log.Printf("Pending Entry Inserted: %+v", PendingEntries)
 
 	app, err := firebase.NewApp(ctx, nil)
 	if err != nil {
