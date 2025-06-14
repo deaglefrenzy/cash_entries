@@ -22,13 +22,13 @@ type CashEntry struct {
 }
 
 type PendingEntries struct {
-	CashEntry  CashEntry `firestore:"cash_entry" json:"cash_entry"`
-	BranchUUID string    `firestore:"branch_uuid" json:"branch_uuid"`
-	Resolved   bool      `firestore:"resolved" json:"resolved"`
-	ResolvedBy string    `firestore:"resolved_by" json:"resolved_by"`
-	ResolvedAt time.Time `firestore:"resolved_at" json:"resolved_at"`
-	Notes      string    `firestore:"notes" json:"notes"`
-	ShiftData  ShiftData `firestore:"shift_data" json:"shift_data"`
+	CashEntry  CashEntry  `firestore:"cash_entry" json:"cash_entry"`
+	BranchUUID string     `firestore:"branch_uuid" json:"branch_uuid"`
+	Resolved   bool       `firestore:"resolved" json:"resolved"`
+	ResolvedBy *string    `firestore:"resolved_by" json:"resolved_by"`
+	ResolvedAt *time.Time `firestore:"resolved_at" json:"resolved_at"`
+	Notes      *string    `firestore:"notes" json:"notes"`
+	ShiftData  ShiftData  `firestore:"shift_data" json:"shift_data"`
 }
 
 type ShiftData struct {

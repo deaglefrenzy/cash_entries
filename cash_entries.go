@@ -33,6 +33,9 @@ func DetectCashEntriesChanges(ctx context.Context, event event.Event) error {
 
 	PendingEntries.BranchUUID = data.Value.Fields["branch_uuid"].GetStringValue()
 	PendingEntries.Resolved = false
+	PendingEntries.ResolvedAt = nil
+	PendingEntries.ResolvedBy = nil
+	PendingEntries.Notes = nil
 	PendingEntries.ShiftData.UUID = data.Value.Fields["uuid"].GetStringValue()
 	PendingEntries.ShiftData.StartTime = data.Value.Fields["created_at"].GetTimestampValue().AsTime()
 	PendingEntries.ShiftData.MainShiftUser = data.Value.Fields["username"].GetStringValue()
