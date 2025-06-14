@@ -1,11 +1,9 @@
-gcloud functions deploy HelloFirestore ^
-    --gen2 ^
-    --runtime=go122 ^
-    --region=asia-southeast1 ^
-    --project=lucy-cashier-dev ^
+gcloud run deploy detectcashentrieschanges ^
+    --base-image=go122 ^
     --source=. ^
-    --trigger-event-filters="type=google.cloud.firestore.document.v1.created" ^
-    --trigger-event-filters="database=(default)" ^
-    --trigger-event-filters-path-pattern="document=monthly_summary_reports/{documentId}" ^
-    --max-instances=10 ^
-    --allow-unauthenticated
+    --function detectCashEntriesChanges ^
+    --region=asia-southeast1
+    --event-filters=type=google.cloud.firestore.document.v1.written ^
+    --event-filters=database='(default)' ^
+    --event-data-content-type=application/protobuf ^
+    --event-filters-path-pattern=document='employee_shifts/{documentId}'
