@@ -2,16 +2,6 @@ package models
 
 import "time"
 
-type EmployeeShifts struct {
-	ActiveSupporterUUIDs []string    `firestore:"active_supporter_uuids"`
-	BranchUUID           string      `firestore:"branch_uuid"`
-	CashEntries          []CashEntry `firestore:"cash_entries"`
-	CreatedAt            time.Time   `firestore:"created_at"`
-	StartCash            float64     `firestore:"start_cash"`
-	Username             string      `firestore:"username"`
-	UUID                 string      `firestore:"uuid"`
-}
-
 type CashEntry struct {
 	CreatedAt   time.Time `firestore:"created_at" json:"created_at"`
 	Description string    `firestore:"description" json:"description"`

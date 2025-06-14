@@ -3,7 +3,6 @@ package cash_entries
 import (
 	"context"
 	"fmt"
-	"log"
 
 	firebase "firebase.google.com/go"
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
@@ -74,7 +73,7 @@ func DetectCashEntriesChanges(ctx context.Context, event event.Event) error {
 
 	PendingEntries.CashEntry = cashEntry
 
-	log.Printf("Pending Entry Inserted: %+v", PendingEntries)
+	//log.Printf("Pending expense entry inserted: %+v", PendingEntries)
 
 	app, err := firebase.NewApp(ctx, nil)
 	if err != nil {
@@ -86,9 +85,9 @@ func DetectCashEntriesChanges(ctx context.Context, event event.Event) error {
 		return fmt.Errorf("fail to connect: %w", err)
 	}
 
-	ref := fs.Collection("pending_entries").NewDoc()
+	ref := fs.Collection("pending_expense_entries").NewDoc()
 	if _, err := ref.Set(ctx, PendingEntries); err != nil {
-		return fmt.Errorf("failed to create pending entries: %w", err)
+		return fmt.Errorf("failed to create pending expense entries: %w", err)
 	}
 
 	return nil
