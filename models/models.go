@@ -8,7 +8,7 @@ type CashEntry struct {
 	Expense     bool      `firestore:"expense" json:"expense"`
 	Username    string    `firestore:"username" json:"username"`
 	UUID        string    `firestore:"uuid" json:"uuid"`
-	Value       int64     `firestore:"value" json:"value"`
+	Value       float64   `firestore:"value" json:"value"`
 }
 
 type PendingEntries struct {

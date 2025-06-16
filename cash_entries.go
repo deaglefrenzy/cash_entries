@@ -27,18 +27,6 @@ func DetectCashEntriesChanges(ctx context.Context, event event.Event) error {
 		return fmt.Errorf("proto.Unmarshal: %w", err)
 	}
 
-	var PendingEntries models.PendingEntries
-	var cashEntry models.CashEntry
-
-	PendingEntries.BranchUUID = data.Value.Fields["branch_uuid"].GetStringValue()
-	PendingEntries.Resolved = false
-	PendingEntries.ResolvedAt = nil
-	PendingEntries.ResolvedBy = nil
-	PendingEntries.Notes = nil
-	PendingEntries.ShiftData.UUID = data.Value.Fields["uuid"].GetStringValue()
-	PendingEntries.ShiftData.StartTime = data.Value.Fields["created_at"].GetTimestampValue().AsTime()
-	PendingEntries.ShiftData.MainShiftUser = data.Value.Fields["username"].GetStringValue()
-
 	if arrValue := data.Value.Fields["cash_entries"].GetArrayValue(); arrValue != nil {
 		arr := arrValue.Values
 		var oldArr []*firestoredata.Value
@@ -57,6 +45,9 @@ func DetectCashEntriesChanges(ctx context.Context, event event.Event) error {
 				}
 			}
 			if !found {
+				var PendingEntries models.PendingEntries
+				var cashEntry models.CashEntry
+
 				if mapValue := entry.GetMapValue(); mapValue != nil {
 					fields := mapValue.Fields
 
@@ -65,29 +56,45 @@ func DetectCashEntriesChanges(ctx context.Context, event event.Event) error {
 					cashEntry.Expense = fields["expense"].GetBooleanValue()
 					cashEntry.Username = fields["username"].GetStringValue()
 					cashEntry.UUID = fields["uuid"].GetStringValue()
-					cashEntry.Value = fields["value"].GetIntegerValue()
+					//cashEntry.Value = fields["value"].GetIntegerValue()
+					if val, ok := fields["value"]; ok {
+						if intVal := val.GetIntegerValue(); intVal != 0 || (val.ValueType == &firestoredata.Value_IntegerValue{}) {
+							cashEntry.Value = float64(intVal)
+						} else if doubleVal := val.GetDoubleValue(); doubleVal != 0 || (val.ValueType == &firestoredata.Value_DoubleValue{}) {
+							cashEntry.Value = doubleVal
+						} else {
+							cashEntry.Value = 0
+						}
+					}
+				}
+				PendingEntries.BranchUUID = data.Value.Fields["branch_uuid"].GetStringValue()
+				PendingEntries.Resolved = false
+				PendingEntries.ResolvedAt = nil
+				PendingEntries.ResolvedBy = nil
+				PendingEntries.Notes = nil
+				PendingEntries.ShiftData.UUID = data.Value.Fields["uuid"].GetStringValue()
+				PendingEntries.ShiftData.StartTime = data.Value.Fields["created_at"].GetTimestampValue().AsTime()
+				PendingEntries.ShiftData.MainShiftUser = data.Value.Fields["username"].GetStringValue()
+				PendingEntries.CashEntry = cashEntry
+
+				//log.Printf("Pending expense entry inserted: %+v", PendingEntries)
+
+				app, err := firebase.NewApp(ctx, nil)
+				if err != nil {
+					return fmt.Errorf("fail to connect: %w", err)
+				}
+
+				fs, err := app.Firestore(ctx)
+				if err != nil {
+					return fmt.Errorf("fail to connect: %w", err)
+				}
+
+				ref := fs.Collection("pending_expense_entries").NewDoc()
+				if _, err := ref.Set(ctx, PendingEntries); err != nil {
+					return fmt.Errorf("failed to create pending expense entries: %w", err)
 				}
 			}
 		}
-	}
-
-	PendingEntries.CashEntry = cashEntry
-
-	//log.Printf("Pending expense entry inserted: %+v", PendingEntries)
-
-	app, err := firebase.NewApp(ctx, nil)
-	if err != nil {
-		return fmt.Errorf("fail to connect: %w", err)
-	}
-
-	fs, err := app.Firestore(ctx)
-	if err != nil {
-		return fmt.Errorf("fail to connect: %w", err)
-	}
-
-	ref := fs.Collection("pending_expense_entries").NewDoc()
-	if _, err := ref.Set(ctx, PendingEntries); err != nil {
-		return fmt.Errorf("failed to create pending expense entries: %w", err)
 	}
 
 	return nil
