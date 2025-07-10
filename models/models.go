@@ -2,6 +2,14 @@ package models
 
 import "time"
 
+type EmployeeShifts struct {
+	BranchUUID  string      `firestore:"branch_uuid"`
+	CashEntries []CashEntry `firestore:"cash_entries"`
+	UUID        string      `firestore:"uuid"`
+	CreatedAt   time.Time   `firestore:"created_at"`
+	Username    string      `firestore:"username"`
+}
+
 type CashEntry struct {
 	CreatedAt   time.Time `firestore:"created_at" json:"created_at"`
 	Description string    `firestore:"description" json:"description"`
@@ -19,6 +27,7 @@ type PendingEntries struct {
 	ResolvedAt *time.Time `firestore:"resolved_at" json:"resolved_at"`
 	Notes      *string    `firestore:"notes" json:"notes"`
 	ShiftData  ShiftData  `firestore:"shift_data" json:"shift_data"`
+	Indexes    []string   `firestore:"indexes" json:"indexes"`
 }
 
 type ShiftData struct {

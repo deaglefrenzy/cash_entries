@@ -1,9 +1,10 @@
-gcloud run deploy detectcashentrieschanges ^
-    --base-image=go122 ^
+gcloud functions deploy detectCashEntriesChanges_v2 ^
+    --gen2 ^
+    --runtime=go122 ^
     --source=. ^
-    --function detectCashEntriesChanges ^
-    --region=asia-southeast1
-    --event-filters=type=google.cloud.firestore.document.v1.written ^
-    --event-filters=database='(default)' ^
-    --event-data-content-type=application/protobuf ^
-    --event-filters-path-pattern=document='employee_shifts/{documentId}'
+    --region=asia-southeast1 ^
+    --entry-point=detectCashEntriesChanges_v2 ^
+    --trigger-event-filters="type=google.cloud.firestore.document.v1.written" ^
+    --trigger-event-filters="database=(default)" ^
+    --trigger-event-filters="document=employee_shifts/{documentId}" ^
+    --trigger-location=asia-southeast1
