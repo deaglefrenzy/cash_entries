@@ -14,7 +14,9 @@
 .gitignore
 
 node_modules
-*_test
+*_test.go
+/test
 
+*.sh
 *.cmd
-/bak
+*.json
