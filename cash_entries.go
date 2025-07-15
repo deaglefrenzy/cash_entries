@@ -10,15 +10,15 @@ import (
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
 	"github.com/cloudevents/sdk-go/v2/event"
 	"github.com/deaglefrenzy/cash_entries/models"
-	"github.com/deaglefrenzy/cash_entries/proto_funcs"
+	"github.com/deaglefrenzy/cash_entries/usecase"
 )
 
 func init() {
-	functions.CloudEvent("detectCashEntriesChanges_v2", DetectCashEntriesChanges)
+	functions.CloudEvent("createcashentries", CreateCashEntries)
 }
 
-func DetectCashEntriesChanges(ctx context.Context, event event.Event) error {
-	before, after, err := proto_funcs.ConvertEventToStruct(ctx, event)
+func CreateCashEntries(ctx context.Context, event event.Event) error {
+	before, after, err := usecase.ConvertEventToStruct(ctx, event)
 	if err != nil {
 		return fmt.Errorf("failed to convert event to struct: %w", err)
 	}

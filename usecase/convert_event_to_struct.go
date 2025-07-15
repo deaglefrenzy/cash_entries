@@ -1,9 +1,10 @@
-package proto_funcs
+package usecase
 
 import (
 	"context"
 	"fmt"
 
+	firestoredata_to_struct "github.com/Lucy-Teknologi/firestoredata-to-struct"
 	"github.com/cloudevents/sdk-go/v2/event"
 	"github.com/deaglefrenzy/cash_entries/models"
 	"github.com/googleapis/google-cloudevents-go/cloud/firestoredata"
@@ -27,7 +28,7 @@ func ConvertEventToStruct(ctx context.Context, event event.Event) (*models.Emplo
 	var before *models.EmployeeShifts
 	if pbDocBefore != nil {
 		var tmp models.EmployeeShifts
-		if err := FirestoreDataTo(pbDocBefore.Fields, &tmp); err != nil {
+		if err := firestoredata_to_struct.FirestoreDataTo(pbDocBefore.Fields, &tmp); err != nil {
 			return nil, nil, fmt.Errorf("failed to convert event data to struct: %w", err)
 		}
 		before = &tmp
@@ -36,7 +37,7 @@ func ConvertEventToStruct(ctx context.Context, event event.Event) (*models.Emplo
 	var after *models.EmployeeShifts
 	if pbDocAfter != nil {
 		var tmp models.EmployeeShifts
-		if err := FirestoreDataTo(pbDocAfter.Fields, &tmp); err != nil {
+		if err := firestoredata_to_struct.FirestoreDataTo(pbDocAfter.Fields, &tmp); err != nil {
 			return nil, nil, fmt.Errorf("failed to convert event data to struct: %w", err)
 		}
 		after = &tmp
