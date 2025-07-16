@@ -5,10 +5,8 @@ go 1.24.0
 require (
 	firebase.google.com/go v3.13.0+incompatible
 	github.com/GoogleCloudPlatform/functions-framework-go v1.9.2
-	github.com/Lucy-Teknologi/firestoredata-to-struct v1.0.1
+	github.com/Lucy-Teknologi/firestoredata-to-struct v1.0.2
 	github.com/cloudevents/sdk-go/v2 v2.16.1
-	github.com/googleapis/google-cloudevents-go v0.10.0
-	google.golang.org/protobuf v1.36.6
 )
 
 require (
@@ -38,6 +36,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.3.6 // indirect
 	github.com/googleapis/gax-go/v2 v2.14.1 // indirect
+	github.com/googleapis/google-cloudevents-go v0.10.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
@@ -68,4 +67,5 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20250603155806-513f23925822 // indirect
 	google.golang.org/grpc v1.73.0 // indirect
+	google.golang.org/protobuf v1.36.6 // indirect
 )

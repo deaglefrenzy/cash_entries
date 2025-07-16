@@ -8,9 +8,9 @@ import (
 
 	firebase "firebase.google.com/go"
 	"github.com/GoogleCloudPlatform/functions-framework-go/functions"
+	firestoredata_to_struct "github.com/Lucy-Teknologi/firestoredata-to-struct"
 	"github.com/cloudevents/sdk-go/v2/event"
 	"github.com/deaglefrenzy/cash_entries/models"
-	"github.com/deaglefrenzy/cash_entries/usecase"
 )
 
 func init() {
@@ -18,7 +18,7 @@ func init() {
 }
 
 func CreateCashEntries(ctx context.Context, event event.Event) error {
-	before, after, err := usecase.ConvertEventToStruct(ctx, event)
+	before, after, err := firestoredata_to_struct.ConvertEventToStruct[models.EmployeeShifts](ctx, event)
 	if err != nil {
 		return fmt.Errorf("failed to convert event to struct: %w", err)
 	}
