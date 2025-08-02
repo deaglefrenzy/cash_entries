@@ -74,23 +74,58 @@ func CreateCashEntries(ctx context.Context, event event.Event) error {
 
 func IndexString(s string) []string {
 	s = strings.ToLower(s)
-	words := strings.Fields(s) // Split into words, removing all whitespace
+	words := strings.Fields(s)
 	if len(words) == 0 {
 		return []string{}
 	}
 
+	resultMap := make(map[string]bool)
 	var result []string
 
-	firstWord := words[0]
-	limit := min(len(firstWord), 10)
-	for i := 1; i <= limit; i++ {
-		result = append(result, firstWord[:i])
+	for i, word := range words {
+		if len(result) >= 35 {
+			break
+		}
+
+		if !resultMap[word] {
+			resultMap[word] = true
+			result = append(result, word)
+			if len(result) >= 35 {
+				break
+			}
+		}
+
+		if i != 0 && len(word) < 3 {
+			continue
+		}
+
+		var limit int
+		switch i {
+		case 0:
+			limit = min(len(word), 10)
+		case 1:
+			limit = min(len(word), 5)
+		default:
+			limit = min(len(word), 3)
+		}
+
+		for j := 1; j <= limit; j++ {
+			prefix := word[:j]
+			if !resultMap[prefix] {
+				resultMap[prefix] = true
+				result = append(result, prefix)
+				if len(result) >= 35 {
+					break
+				}
+			}
+		}
 	}
 
-	// Add the remaining words
 	if len(words) > 1 {
-		rest := strings.Join(words[1:], " ")
-		result = append(result, firstWord+" "+rest)
+		full := strings.Join(words, " ")
+		if !resultMap[full] {
+			result = append(result, full)
+		}
 	}
 
 	return result
